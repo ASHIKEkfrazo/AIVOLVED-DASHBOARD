@@ -97,7 +97,9 @@ function Main({ children }) {
               />
             </AntHeader>
           </Affix>
-        ) : (
+        ) : 
+          <div className=""  style={{margin:'2rem',borderRadius:'20px', boxShadow:"rgb(0 0 0 / 24%) 1px 7px 10px",height:"100%",background:'#fff'}}>
+          
           <AntHeader className={`${fixed ? "ant-header-fixed" : ""}`}>
             <Header
               onPress={openDrawer}
@@ -108,9 +110,10 @@ function Main({ children }) {
               handleFixedNavbar={handleFixedNavbar}
             />
           </AntHeader>
-        )}
         <Content className="content-ant">{children}</Content>
       
+        </div>
+        }
       </Layout>
     </Layout>
   );

@@ -1,3 +1,34 @@
 .layout-dashboard .ant-layout-content{
     margin: 0 2rem 0 !important;
 }
+
+/*
+Hide the original input
+*/
+label input{display:none}
+
+/*
+The label acts as a button, so we style it accordingly
+*/
+label{
+  padding:1rem 1.5rem;
+  background:#1f66fd;
+  box-shadow:2px 2px 2px #aaa;
+  font:1em Arial, sans-serif;
+  color:#fff;
+  position:relative;
+  cursor:pointer;
+  /*
+  No text-selection on buttons
+  */
+  user-select:none; 
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
+label:active{
+ top:2px; 
+ box-shadow:none;
+}
+

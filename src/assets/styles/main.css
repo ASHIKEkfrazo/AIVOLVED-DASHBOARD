@@ -22,6 +22,8 @@ body {
 
 .ant-layout.ant-layout-has-sider {
   flex-direction: row;
+  background-color: #FAF5F5
+  ;
 }
 
 .layout-dashboard {
@@ -308,7 +310,7 @@ body {
 .layout-dashboard .ant-layout {
   background: transparent;
   position: relative;
-  min-height: 100vh;
+  min-height: 98vh;
   width: 100%;
   flex-shrink: 0;
 }
@@ -3146,4 +3148,48 @@ button.next-button {
   top: 50%;
   right: 5%;
 }
+
+/*
+Hide the original input
+*/
+label input{display:none}
+
+/*
+The label acts as a button, so we style it accordingly
+*/
+label{
+  background:#80808024;
+  font:1em Arial, sans-serif;
+  color:#000;
+  position:relative;
+  cursor:pointer;
+  font-weight: 500;
+  /*
+  No text-selection on buttons
+  */
+  user-select:none; 
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  width: 8rem;
+  height: 3rem;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+}
+
+
+label:active{
+ top:2px; 
+ box-shadow:none;
+}
+.organization_tab:hover{
+border: 1px solid #f56a00 !important;
+background: 1px solid #f56a00b3 !important;
+}
+/*
+Center button horizonatlly and vertically
+*/
 

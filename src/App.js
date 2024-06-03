@@ -11,7 +11,9 @@ import Dashboard from "./pages/Dashboard";
 import MachinesParameter from "./pages/MachinesParameter";
 import Camera from "./pages/Camera";
 import Settings from "./pages/Settings";
-// import Settings from "./pages/Settings";
+import Organization from "./pages/Organisation";
+import Plants from "./pages/Plants"
+import Selectdashboard from "./pages/Select_dashboard";
 
 function App() {
   return (
@@ -26,6 +28,9 @@ function App() {
           <Route exact path="/machines-parameter" component={MachinesParameter} />
           <Route exact path="/camera" component={Camera} />
           <Route exact path="/settings" component={Settings} />
+          <Route exact path="/organization" component={Organization} />
+          <Route exact path="/Plants" component={Plants} />
+          <Route exact path="/Organization Dashboard" component={Selectdashboard} />
           <Redirect from="*" to="/dashboard-home" />
         </Main>
       </Switch>
