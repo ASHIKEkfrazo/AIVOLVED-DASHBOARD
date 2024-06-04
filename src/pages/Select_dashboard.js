@@ -19,7 +19,6 @@ const Select_dashboard = () => {
     title: "Machine 1",
     img: "https://aivolved.in/wp-content/uploads/2022/11/ai-logo.png",
   });
-  console.log(data.map((item) => item.img));
   return (
     <>
       <Row style={{ display: "flex", gap: "1rem" }}>

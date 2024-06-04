@@ -51,7 +51,8 @@ const Plants = () => {
             style={{
               width: "100px",
               height: "100px",
-              background:'rgb(0 0 0 / 4%)',              display: "flex",
+              background:'rgb(0 0 0 / 4%)',   
+              display: "flex",
               justifyContent: "center",
               alignItems: "center",
               borderRadius: "50%",

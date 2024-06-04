@@ -3193,3 +3193,7 @@ background: 1px solid #f56a00b3 !important;
 Center button horizonatlly and vertically
 */
 
+.ant-tabs-ink-bar {
+  height: 10px;
+  padding: 2px;
+}
