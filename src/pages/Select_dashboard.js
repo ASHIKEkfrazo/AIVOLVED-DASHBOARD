@@ -84,7 +84,8 @@ return (
             style={{
               width: "100px",
               height: "100px",
-              background:'rgb(0 0 0 / 4%)',              display: "flex",
+              background:'rgb(0 0 0 / 4%)',
+              display: "flex",
               justifyContent: "center",
               alignItems: "center",
               borderRadius: "50%",
@@ -149,7 +150,7 @@ return (
           alignItems: "center",
           gap: "1rem",
           border: "1px solid grey",
-          height: "400px",
+          height: "300px",
           borderRadius: "10px",
         }}
       >
