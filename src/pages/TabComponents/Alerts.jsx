@@ -1,7 +1,6 @@
 import React ,{useMemo, useState,useEffect,} from 'react';
 import {Button, Select ,Space, Card, Col, Row ,ColorPicker,Table, Tag, Form, Input, Radio, notification, Descriptions } from 'antd';
 import { Switch } from 'antd';
-import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import axios from "axios";
 import { API, baseURL } from '../../API/apirequest'
 

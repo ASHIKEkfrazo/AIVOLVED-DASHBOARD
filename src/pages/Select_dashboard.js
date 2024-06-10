@@ -1,12 +1,26 @@
 import { Row, Col, Button, Card, Space, Modal } from "antd";
-import React, { useState, Link } from "react";
+import React, { useState, Link, useEffect } from "react";
 import Person from ".././assets/images/person.png";
 import Download from ".././assets/images/material.png";
 import { DownloadOutlined } from "@ant-design/icons";
+import axios from "axios";
+import { BASEURL } from "../API/apirequest";
+import { useParams } from "react-router-dom";
 
 const Select_dashboard = () => {
+  const {id} = useParams()
+  const numId = id.replace(/\D/g, '');
   const [modal2Open, setModal2Open] = useState(false);
   const [ImageFile, setImageFile] = useState(null);
+  const [dataplant, setDataPlant] = useState(null);
+  const [dataOrg, setDataOrg] = useState(null);
+  let parsedLocaldata;
+
+useEffect(()=>{
+  const localData = localStorage.getItem("dataOrgPlant");
+   parsedLocaldata=  JSON.parse(localData);
+},[])
+
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -14,14 +28,82 @@ const Select_dashboard = () => {
     console.log(image);
     setImageFile(image);
   };
+  let token;
+  useEffect(()=>{
+    const localToken =  localStorage.getItem("token")
+    token = JSON.parse(localToken)
 
-  const data = Array(12).fill({
-    title: "Machine 1",
-    img: "https://aivolved.in/wp-content/uploads/2022/11/ai-logo.png",
-  });
+  })
+useEffect(()=>{
+  axios.get(`${BASEURL}plant/${parsedLocaldata.pID}`,{
+    headers:{
+      Authorization:`Bearer ${token}`
+    }
+  })
+  .then((res)=>{
+    setDataPlant([res.data])
+  })
+  .then(err=>console.log(err))
+},[])
+
+useEffect(()=>{
+  axios.get(`${BASEURL}organization/${parsedLocaldata.oID}`,{
+    headers:{
+      Authorization:token
+    }
+  })
+  .then((res)=>{
+    setDataOrg([res.data.results])
+  })
+  .then(err=>console.log(err))
+},[])
+console.log(dataOrg)
   return (
     <>
       <Row style={{ display: "flex", gap: "1rem" }}>
+     {
+dataOrg?.map((val,index)=>{
+return (
+
+
+        <Card
+     
+          size="small"
+          style={{
+            width: "400px",
+            display: "flex",
+            justifyContent: "center",
+            height: "200px",
+            alignItems: "center",
+            boxShadow: "none",
+            border: "1px solid #0000004a",
+          }}
+        >
+          <div
+            className=""
+            style={{
+              width: "100px",
+              height: "100px",
+              background:'rgb(0 0 0 / 4%)',              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              borderRadius: "50%",
+            }}
+          >
+            <img
+              src={val.organization_logo}
+              style={{ width: "60%" }}
+              alt=""
+            />
+          </div>{" "}
+          <h3>{val.organization_name}</h3>
+        </Card>
+)
+})
+     }
+        {
+dataplant?.map((val,index)=>{
+return (
         <Card
           size="small"
           style={{
@@ -51,39 +133,10 @@ const Select_dashboard = () => {
               alt=""
             />
           </div>{" "}
-          <h3>Organization Name</h3>
-        </Card>
-        <Card
-          size="small"
-          style={{
-            width: "400px",
-            display: "flex",
-            justifyContent: "center",
-            height: "200px",
-            alignItems: "center",
-            boxShadow: "none",
-            border: "1px solid #0000004a",
-          }}
-        >
-          <div
-            className=""
-            style={{
-              width: "100px",
-              height: "100px",
-              background:'rgb(0 0 0 / 4%)',              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              borderRadius: "50%",
-            }}
-          >
-            <img
-              src="https://aivolved.in/wp-content/uploads/2022/11/ai-logo.png"
-              style={{ width: "60%" }}
-              alt=""
-            />
-          </div>{" "}
-          <h3>Plant Name</h3>
-        </Card>
+          <h3>{val.plant_name}</h3>
+        </Card>)
+})
+        }
       </Row>
 
       <Row

@@ -1,24 +1,128 @@
 import { Row, Col, Button, Card, Space, Modal } from "antd";
-import React, { useState,  } from "react";
-import { Link } from "react-router-dom/cjs/react-router-dom.min";
-
+import React, { useEffect, useState } from "react";
+import { Link, useParams,useLocation,useHistory } from "react-router-dom";
+import { BASEURL,token } from "../API/apirequest";
+import axios from "axios";
+import { Switch } from "antd";
 
 const Plants = () => {
+ const history = useHistory();
   const [modal2Open, setModal2Open] = useState(false);
   const [ImageFile, setImageFile] = useState(null);
+  const [plants, setPlants] = useState([]);
+  const [organization, setOrganization] = useState();
 
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    const image = URL.createObjectURL(file);
-    console.log(image);
-    setImageFile(image);
+  const [error, setError] = useState({
+    nameError: "",
+  });
+ 
+  const localData = localStorage.getItem("dataOrgPlant");
+  const parsedLocaldata=  JSON.parse(localData);
+
+
+  const [formData, setFormData] = useState({
+    plant_name: "",
+    is_active: false,
+    organization_name:parsedLocaldata?.oID
+  });
+
+console.log(parsedLocaldata)
+  const { id } = useParams();
+  const numberID = id.replace(/\D/g, '');
+
+  useEffect(()=>{
+    localStorage.setItem("componentPath",location.pathname)
+  },[])
+
+  useEffect(() => {
+    axios
+      .get(`${BASEURL}plant/?organization_id=${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        setPlants(res.data.results);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  useEffect(()=>{
+    axios
+    .get(`${BASEURL}organization/${numberID}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((res) => {
+      setOrganization([res.data.results]);
+    })
+    .catch((err) => console.log(err));
+  },[]);
+
+  const location = useLocation();
+
+  // const handleImageUpload = (e) => {
+  //   const file = e.target.files[0];
+  //   const image = URL.createObjectURL(file);
+  //   setImageFile(image);
+  // };
+  console.log(id)
+
+  const createPlant = async () => {
+    try {
+      const res = await axios.post(`${BASEURL}plant/`,formData,  {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if(res.status == 201){
+        setModal2Open(false);
+       window.location.reload()
+       }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  
+  const handleSwitch = (checked) => {
+    setFormData((prev) => ({ ...prev, is_active: checked }));
   };
 
-  const data = Array(12).fill({
-    title: "Machine 1",
-    img: "https://aivolved.in/wp-content/uploads/2022/11/ai-logo.png",
-  });
-  console.log(data.map((item) => item.img));
+  const handleChange = (e) => {
+    setError((err) => ({ ...err, nameError: "" }));
+    const { value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      plant_name: value,
+    }));
+    // setFormData((prev)=>({...prev,"organization_name":organization[0]?.organization_name}))
+
+  };
+
+  const handlepPost = () => {
+
+  if(formData.plant_name === ""){
+  setError((prev)=>({...prev,nameError:"Please Enter Plant name"}))
+  }else{
+    setError((prev)=>({...prev,nameError:""}))
+
+  }
+
+console.log(formData)
+console.log(error)
+if( error.nameError !== "" || formData.plant_name === ""){
+   return
+  }
+else{
+  createPlant();
+}
+
+  };
+  const handleStorage =(id)=>{
+    const organizationAndplant = {"pID":id,"oID": organization[0].id}
+    localStorage.setItem("dataOrgPlant", JSON.stringify(organizationAndplant));
+  }
   return (
     <>
       <Row gutter={24} style={{ display: "flex", justifyContent: "end" }}>
@@ -34,7 +138,11 @@ const Plants = () => {
         </Col>
       </Row>
       <Row>
+        {
+          organization?.map((val,index)=>{
+            return(
         <Card
+        key={val.id}
           size="small"
           style={{
             width: "400px",
@@ -51,7 +159,7 @@ const Plants = () => {
             style={{
               width: "100px",
               height: "100px",
-              background:'rgb(0 0 0 / 4%)',   
+              background: "rgb(0 0 0 / 4%)",
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
@@ -59,13 +167,16 @@ const Plants = () => {
             }}
           >
             <img
-              src="https://aivolved.in/wp-content/uploads/2022/11/ai-logo.png"
+              src={val.organization_logo}
               style={{ width: "60%" }}
               alt=""
             />
           </div>{" "}
-          <h3>Organization Name</h3>
+          <h3>{val.organization_name}</h3>
         </Card>
+            )
+          })
+        }
       </Row>
 
       <Row
@@ -77,46 +188,45 @@ const Plants = () => {
           gap: "1rem",
         }}
       >
-        {data.map((index, item) => (
-            <Link to="/Organization Dashboard">
-            
-          <Card
-            key={index}
-            size="small"
-            style={{
-              width: "250px",
-              display: "flex",
-              justifyContent: "center",
-              height: "200px",
-              alignItems: "center",
-              boxShadow: "none",
-              border: "1px solid #0000004a",
-            }}
-          >
-            <div
-              className=""
+        {plants?.map((item, index) => (
+          <Link to={`/Organization-Dashboard/${item.id}`} onClick={()=>handleStorage(item.id)}>
+            <Card
+              key={index}
+              size="small"
               style={{
-                width: "100px",
-                height: "100px",
-                background:'rgb(0 0 0 / 4%)',
-                                display: "flex",
+                width: "250px",
+                display: "flex",
                 justifyContent: "center",
+                height: "200px",
                 alignItems: "center",
-                borderRadius: "50%",
+                boxShadow: "none",
+                border: "1px solid #0000004a",
               }}
             >
-              <img
-                src="https://aivolved.in/wp-content/uploads/2022/11/ai-logo.png"
-                style={{ width: "60%" }}
-                alt=""
-              />
-            </div>
-            <h3>Plants 1</h3>
-          </Card>
-            </Link>
+              <div
+                className=""
+                style={{
+                  width: "100px",
+                  height: "100px",
+                  background: "rgb(0 0 0 / 4%)",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  borderRadius: "50%",
+                }}
+              >
+                <img
+                  src="https://aivolved.in/wp-content/uploads/2022/11/ai-logo.png"
+                  style={{ width: "60%" }}
+                  alt=""
+                />
+              </div>
+              <h3 style={{ textAlign: "center" }}>{item.plant_name}</h3>
+            </Card>
+          </Link>
         ))}
       </Row>
-      <Modal
+  <Modal
         width={"400px"}
         title={
           <div
@@ -126,7 +236,7 @@ const Plants = () => {
               fontSize: "1.5rem",
             }}
           >
-            Create Plant
+            Create Plants
           </div>
         }
         centered
@@ -145,7 +255,7 @@ const Plants = () => {
             alignItems: "center",
           }}
         >
-          {ImageFile ? (
+          {/* {ImageFile ? (
             <img
               src={ImageFile}
               style={{
@@ -167,6 +277,14 @@ const Plants = () => {
               accept="image/*"
             />
           </label>
+          {error.imageError ? (
+            <span style={{ fontWeight: "bolder", color: "red" }}>
+              *{error.imageError}
+            </span>
+          ) : (
+            ""
+          )} */}
+
           <input
             type="text"
             style={{
@@ -178,7 +296,33 @@ const Plants = () => {
               outline: "none",
             }}
             placeholder="Enter Plant Name"
+            onChange={handleChange}
           />
+          {error.nameError ? (
+            <span
+              style={{
+                fontWeight: "bolder",
+                color: "red",
+                textAlign: "start",
+                width: "100%",
+              }}
+            >
+              *{error.nameError}
+            </span>
+          ) : (
+            ""
+          )}
+
+          <div
+            className=""
+            style={{
+              display: "flex",
+              justifyContent: "flex-start",
+              width: "100%",
+            }}
+          >
+            <Switch onChange={handleSwitch} />
+          </div>
         </div>
         <div
           className=""
@@ -192,7 +336,7 @@ const Plants = () => {
           >
             Cancel
           </Button>{" "}
-          <Button type="primary" danger onClick={() => setModal2Open(true)}>
+          <Button type="primary" danger onClick={() => handlepPost()}>
             Save
           </Button>{" "}
         </div>

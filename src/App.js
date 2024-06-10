@@ -14,14 +14,28 @@ import Settings from "./pages/Settings";
 import Organization from "./pages/Organisation";
 import Plants from "./pages/Plants"
 import Selectdashboard from "./pages/Select_dashboard";
+import Login from "./pages/Auth/Login";
+import ResetPassword from "./pages/Auth/ResetPassword";
+
+
+const NotFound = ()=>{
+  return(
+  <>
+  Not found
+  </>
+  )
+}
 
 function App() {
+
+
+
   return (
     <div className="App" >
       <Switch>
-        <Route path="/sign-up" exact component={SignUp} />
-        <Route path="/sign-in" exact component={SignIn} />
-        <Main>
+        <Route path="/resetPassword" exact component={ResetPassword} />
+        <Route path="/login" exact component={Login} />
+        <Main >
           <Route exact path="/dashboard-home" component={Dashboard} />
           <Route exact path="/reports" component={Reports} />
           <Route exact path="/ai-smart-view" component={AiSmartView} />
@@ -29,10 +43,10 @@ function App() {
           <Route exact path="/camera" component={Camera} />
           <Route exact path="/settings" component={Settings} />
           <Route exact path="/organization" component={Organization} />
-          <Route exact path="/Plants" component={Plants} />
-          <Route exact path="/Organization Dashboard" component={Selectdashboard} />
-          <Redirect from="*" to="/dashboard-home" />
+          <Route exact path="/Plants/:id" component={Plants} />
+          <Route exact path="/Organization-Dashboard/:id" component={Selectdashboard} />
         </Main>
+         <Route path="*" component={NotFound} />
       </Switch>
     </div>
   );

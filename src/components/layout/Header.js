@@ -313,7 +313,7 @@ function Header({
               className="ant-page-header-heading-title"
               style={{ textTransform:'capitalize',fontSize:'1.4rem' }}
             >
-              {subName.replace("/", "")}
+{subName.replace(/[0-9/:]/g, "").replace("/", "")}
             </span>
           </div>
         </Col>

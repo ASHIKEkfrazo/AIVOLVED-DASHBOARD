@@ -374,8 +374,10 @@ const categorizeDefects = (data) => {
                       {
                         alertData ? 
                         <span>{Object.keys(alertData).length }</span>
-                        :null
+                        : <span>6</span>
                       }
+                      
+
                     </Col>
                     <Col xs={6}>
                       <div className="icon-box"><AlertOutlined /></div>
@@ -387,9 +389,9 @@ const categorizeDefects = (data) => {
         </Row>
         <Row style={{display:'flex',justifyContent:'center'}}>
 
-<Col  className="mb-24" style={{width:"100%",margin:'3rem 0',display:'flex',justifyContent:'center'}}>
+{/* <Col  className="mb-24" style={{width:"100%",margin:'3rem 0',display:'flex',justifyContent:'center'}}>
 <Slider data={imageData}/>
-</Col> 
+</Col>  */}
 </Row>
    
         <Row gutter={[24, 24]}>
